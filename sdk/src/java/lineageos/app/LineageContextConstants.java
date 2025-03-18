@@ -93,13 +93,6 @@ public final class LineageContextConstants {
     public static final String WAYDROID_PLATFORM_SERVICE = "waydroidplatform";
 
     /**
-     * Manages waydroid clipboard
-     *
-     * @hide
-     */
-    public static final String WAYDROID_CLIPBOARD_SERVICE = "waydroidclipboard";
-
-    /**
      * Manages waydroid hardware
      *
      * @hide
