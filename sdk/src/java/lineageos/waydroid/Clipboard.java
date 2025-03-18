@@ -22,12 +22,15 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import java.util.NoSuchElementException;
+
 import lineageos.app.LineageContextConstants;
+import vendor.waydroid.clipboard.V1_0.IWaydroidClipboard;
 
 public class Clipboard {
     private static final String TAG = "WayDroidClipboard";
 
-    private static IClipboard sService;
+    private static IWaydroidClipboard sService;
     private static Clipboard sInstance;
 
     private Context mContext;
@@ -52,24 +55,21 @@ public class Clipboard {
     }
 
     /** @hide **/
-    public static IClipboard getService() {
+    public static IWaydroidClipboard getService() {
         if (sService != null) {
             return sService;
         }
-        IBinder b = ServiceManager.getService(LineageContextConstants.WAYDROID_CLIPBOARD_SERVICE);
-
-        if (b == null) {
+        try {
+            sService = IWaydroidClipboard.getService(false /* retry */);
+        } catch (RemoteException | NoSuchElementException e) {
             Log.e(TAG, "null service. SAD!");
-            return null;
         }
-
-        sService = IClipboard.Stub.asInterface(b);
         return sService;
     }
 
     /** @hide **/
     public void sendClipboardData(String value) {
-        IClipboard service = getService();
+        IWaydroidClipboard service = getService();
         if (service == null) {
             return;
         }
@@ -82,7 +82,7 @@ public class Clipboard {
     }
 
     public String getClipboardData() {
-        IClipboard service = getService();
+        IWaydroidClipboard service = getService();
         if (service == null) {
             return "";
         }
