@@ -107,6 +107,13 @@ public final class LineageContextConstants {
     public static final String WAYDROID_USERMONITOR_SERVICE = "waydroidusermonitor";
 
     /**
+     * Forwards notifications to the desktop
+     *
+     * @hide
+     */
+    public static final String WAYDROID_NOTIFICATIONS_SERVICE = "waydroidnotifications";
+
+    /**
      * Update power menu (GlobalActions)
      *
      * @hide
