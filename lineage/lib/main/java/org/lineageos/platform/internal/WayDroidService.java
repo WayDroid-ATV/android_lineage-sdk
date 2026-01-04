@@ -110,10 +110,12 @@ public class WayDroidService extends LineageSystemService {
         publishBinderService(LineageContextConstants.WAYDROID_PLATFORM_SERVICE, mPlatformService);
         if (mContext != null) {
             mUM = UserMonitor.getInstance(mContext);
-            try {
-                mWaydroidNotifications = Notifications.getInstance(mContext);
-            } catch (Exception e) {
-                Log.w(TAG, e.getMessage());
+            if (SystemProperties.getBoolean("persist.waydroid.forward_notifications", false)) {
+                try {
+                    mWaydroidNotifications = Notifications.getInstance(mContext);
+                } catch (Exception e) {
+                    Log.w(TAG, e.getMessage());
+                }
             }
         } else {
             Log.w(TAG, "No context available");
