@@ -132,7 +132,7 @@ public class WayDroidService extends LineageSystemService {
         for (int n = 0; n < apps.size(); n++) {
             ApplicationInfo appInfo = apps.get(n);
 
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+            Intent launchIntent = getAppLaunchIntent(appInfo.packageName);
             if (launchIntent == null) {
                 continue;
             }
@@ -148,6 +148,20 @@ public class WayDroidService extends LineageSystemService {
             String nameOfLauncherPkg = defaultLauncher.activityInfo.packageName;
             SystemProperties.set("waydroid.blacklist_apps", nameOfLauncherPkg);
         }
+    }
+
+    private Intent getAppLaunchIntent(String packageName) {
+        Intent launchIntent = null;
+
+        if (mPm.hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+            launchIntent = mPm.getLeanbackLaunchIntentForPackage(packageName);
+        }
+
+        if (launchIntent == null) {
+            launchIntent = mPm.getLaunchIntentForPackage(packageName);
+        }
+
+        return launchIntent;
     }
 
     private void saveApplicationIcon(String packageName) {
@@ -417,7 +431,7 @@ public class WayDroidService extends LineageSystemService {
             for (int n = 0; n < apps.size(); n++) {
                 ApplicationInfo appInfo = apps.get(n);
 
-                Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+                Intent launchIntent = getAppLaunchIntent(appInfo.packageName);
                 if (launchIntent == null) {
                     continue;
                 }
@@ -455,7 +469,7 @@ public class WayDroidService extends LineageSystemService {
             } catch (NameNotFoundException e) {
                 return null;
             }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+            Intent launchIntent = getAppLaunchIntent(appInfo.packageName);
             if (launchIntent == null) {
                 return null;
             }
@@ -559,7 +573,7 @@ public class WayDroidService extends LineageSystemService {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-            Intent launchIntent = mPm.getLaunchIntentForPackage(appInfo.packageName);
+            Intent launchIntent = getAppLaunchIntent(appInfo.packageName);
             if (launchIntent == null) {
                 return;
             }
