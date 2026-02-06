@@ -17,6 +17,8 @@
 package org.lineageos.platform.internal;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.annotation.NonNull;
 import android.content.ActivityNotFoundException;
@@ -78,10 +80,15 @@ public class WayDroidService extends LineageSystemService {
             "org.lineageos.platform.waydroid.ACTION_UNINSTALL_COMMIT";
     private static final String ICONS_DIR = "/data/icons";
 
+    private static final String WAYDROID_CHANNEL_ID = "WaydroidService";
+    private static final String WAYDROID_CHANNEL_ID_TV = "WaydroidService.tv";
+    private static final int WAYDROID_NOTIFICATION_ID = 90;
+
     private Context mContext;
     private PackageManager mPm = null;
     private UserMonitor mUM = null;
     private Notifications mWaydroidNotifications = null;
+    private NotificationManager mNotificationManager = null;
     private NotificationListenerService mSystemNotificationListener = null;
 
     // Map android notification id -> host notification id
@@ -129,6 +136,22 @@ public class WayDroidService extends LineageSystemService {
     }
 
     @Override
+    public void onBootPhase(int phase) {
+        if (phase == PHASE_BOOT_COMPLETED) {
+            mNotificationManager = mContext.getSystemService(NotificationManager.class);
+
+            if (!new File("/dev/dma_heap/system").exists()) {
+                Log.w(TAG, "DMA-BUF system heap is missing");
+                showNotification(
+                    WAYDROID_NOTIFICATION_ID,
+                    mContext.getString(R.string.waydroid_dmabuf_missing_title),
+                    mContext.getString(R.string.waydroid_dmabuf_missing_msg)
+                );
+            }
+        }
+    }
+
+    @Override
     public void onUserUnlocked(@NonNull TargetUser user) {
         List<ApplicationInfo> apps = mPm.getInstalledApplications(0);
         for (int n = 0; n < apps.size(); n++) {
@@ -152,10 +175,43 @@ public class WayDroidService extends LineageSystemService {
         }
     }
 
+    private boolean isTv() {
+        return mPm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }
+
+    private void createNotificationChannelIfNeeded() {
+        String id = !isTv() ? WAYDROID_CHANNEL_ID : WAYDROID_CHANNEL_ID_TV;
+
+        if (mNotificationManager.getNotificationChannel(id) != null) {
+            return;
+        }
+
+        String name = mContext.getString(R.string.trust_notification_channel);
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel(id, name, importance);
+        channel.setBlockable(true);
+        mNotificationManager.createNotificationChannel(channel);
+    }
+
+    private void showNotification(int notificationId, String title, String message) {
+        createNotificationChannelIfNeeded();
+
+        Notification.Builder notification = new Notification.Builder(mContext, WAYDROID_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setStyle(new Notification.BigTextStyle().bigText(message))
+                .setAutoCancel(true)
+                .setColor(mContext.getColor(R.color.color_error))
+                .setSmallIcon(R.drawable.ic_warning)
+                .extend(new Notification.TvExtender().setChannelId(WAYDROID_CHANNEL_ID_TV));
+
+        mNotificationManager.notify(notificationId, notification.build());
+    }
+
     private Intent getAppLaunchIntent(String packageName) {
         Intent launchIntent = null;
 
-        if (mPm.hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+        if (isTv()) {
             launchIntent = mPm.getLeanbackLaunchIntentForPackage(packageName);
         }
 

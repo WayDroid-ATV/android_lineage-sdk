@@ -206,4 +206,8 @@
 
     <!-- Advanced rotation settings -->
     <java-symbol type="bool" name="config_enableAdvancedRotationSettings" />
+
+    <!-- Waydroid -->
+    <java-symbol type="string" name="waydroid_dmabuf_missing_title" />
+    <java-symbol type="string" name="waydroid_dmabuf_missing_msg" />
 </resources>
