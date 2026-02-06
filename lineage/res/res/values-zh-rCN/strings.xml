@@ -85,4 +85,6 @@
     <string name="charging_control_notification_content_limit_reached">电池已充电 %1$d%%</string>
     <string name="charging_control_notification_content_target">电池将在 %1$s 完全充满</string>
     <string name="charging_control_notification_content_target_reached">电池已充满</string>
+    <string name="waydroid_dmabuf_missing_title">系统缺少 DMA-BUF 支持</string>
+    <string name="waydroid_dmabuf_missing_msg">DMA-BUF 系统堆不存在（可能在内核中被禁用？），视频可能无法正常播放</string>
 </resources>
