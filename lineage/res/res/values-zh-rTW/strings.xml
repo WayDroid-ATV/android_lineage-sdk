@@ -92,4 +92,6 @@
     <string name="charging_control_notification_content_limit_reached">電池已充電至 %1$d%%</string>
     <string name="charging_control_notification_content_target">電池已在 %1$s 完全充飽</string>
     <string name="charging_control_notification_content_target_reached">電池已完成充電</string>
+    <string name="waydroid_dmabuf_missing_title">系統不支援 DMA-BUF</string>
+    <string name="waydroid_dmabuf_missing_msg">DMA-BUF 系統堆疊不存在（可能在核心中被停用？），影片可能無法正常播放</string>
 </resources>

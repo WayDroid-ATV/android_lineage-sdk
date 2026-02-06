@@ -213,4 +213,8 @@
 
     <!-- Lockscreen rotation default -->
     <java-symbol type="bool" name="config_lockScreenRotationEnabledByDefault" />
+
+    <!-- Waydroid -->
+    <java-symbol type="string" name="waydroid_dmabuf_missing_title" />
+    <java-symbol type="string" name="waydroid_dmabuf_missing_msg" />
 </resources>
