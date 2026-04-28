@@ -82,7 +82,10 @@ public class WayDroidService extends LineageSystemService {
 
     private static final String WAYDROID_CHANNEL_ID = "WaydroidService";
     private static final String WAYDROID_CHANNEL_ID_TV = "WaydroidService.tv";
-    private static final int WAYDROID_NOTIFICATION_ID = 90;
+
+    private static final int INTEGRATION_WARN_ID = 1;
+    private static final int DMABUF_WARN_ID = 1 << 2;
+    private static final int SW_RENDERING_WARN_ID = 1 << 3;
 
     private Context mContext;
     private PackageManager mPm = null;
@@ -140,13 +143,44 @@ public class WayDroidService extends LineageSystemService {
         if (phase == PHASE_BOOT_COMPLETED) {
             mNotificationManager = mContext.getSystemService(NotificationManager.class);
 
+            if (mUM == null && !SystemProperties.get("waydroid.tools_version").isEmpty()) {
+                Log.w(TAG, "Waydroid integration is not functional");
+                showNotification(
+                    INTEGRATION_WARN_ID,
+                    mContext.getString(R.string.broken_waydroid_integration_title),
+                    mContext.getString(R.string.broken_waydroid_integration_msg),
+                    mContext.getString(R.string.broken_waydroid_integration_url)
+                );
+            }
+
             if (!new File("/dev/dma_heap/system").exists()) {
                 Log.w(TAG, "DMA-BUF system heap is missing");
                 showNotification(
-                    WAYDROID_NOTIFICATION_ID,
-                    mContext.getString(R.string.waydroid_dmabuf_missing_title),
-                    mContext.getString(R.string.waydroid_dmabuf_missing_msg)
+                    DMABUF_WARN_ID,
+                    mContext.getString(R.string.dmabuf_missing_title),
+                    mContext.getString(R.string.dmabuf_missing_msg),
+                    mContext.getString(R.string.dmabuf_missing_url)
                 );
+            }
+
+            if (SystemProperties.get("ro.hardware.egl").equals("angle") && SystemProperties.get("ro.hardware.vulkan").equals("pastel")) {
+                if (SystemProperties.getBoolean("ro.waydroid.unsupported_nvidia_kmd", false)) {
+                    Log.w(TAG, "Unsupported NVIDIA kernel driver detected");
+                    showNotification(
+                        SW_RENDERING_WARN_ID,
+                        mContext.getString(R.string.unsupported_nvidia_kmd_title),
+                        mContext.getString(R.string.unsupported_nvidia_kmd_msg),
+                        mContext.getString(R.string.unsupported_nvidia_kmd_url)
+                    );
+                } else {
+                    Log.w(TAG, "Waydroid is running without GPU acceleration");
+                    showNotification(
+                        SW_RENDERING_WARN_ID,
+                        mContext.getString(R.string.sw_rendering_title),
+                        mContext.getString(R.string.sw_rendering_msg),
+                        mContext.getString(R.string.sw_rendering_url)
+                    );
+                }
             }
         }
     }
@@ -193,7 +227,7 @@ public class WayDroidService extends LineageSystemService {
         mNotificationManager.createNotificationChannel(channel);
     }
 
-    private void showNotification(int notificationId, String title, String message) {
+    private void showNotification(int notificationId, String title, String message, String url) {
         createNotificationChannelIfNeeded();
 
         Notification.Builder notification = new Notification.Builder(mContext, WAYDROID_CHANNEL_ID)
@@ -204,6 +238,16 @@ public class WayDroidService extends LineageSystemService {
                 .setColor(mContext.getColor(R.color.color_error))
                 .setSmallIcon(R.drawable.ic_warning)
                 .extend(new Notification.TvExtender().setChannelId(WAYDROID_CHANNEL_ID_TV));
+
+        if (url != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                mContext, 0,
+                new Intent(Intent.ACTION_VIEW, Uri.parse(url)),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            notification.setContentIntent(pendingIntent);
+        }
 
         mNotificationManager.notify(notificationId, notification.build());
     }
