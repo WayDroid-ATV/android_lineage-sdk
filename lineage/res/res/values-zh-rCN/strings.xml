@@ -85,6 +85,12 @@
     <string name="charging_control_notification_content_limit_reached">电池已充电 %1$d%%</string>
     <string name="charging_control_notification_content_target">电池将在 %1$s 完全充满</string>
     <string name="charging_control_notification_content_target_reached">电池已充满</string>
-    <string name="waydroid_dmabuf_missing_title">系统缺少 DMA-BUF 支持</string>
-    <string name="waydroid_dmabuf_missing_msg">DMA-BUF 系统堆不存在（可能在内核中被禁用？），视频可能无法正常播放</string>
+    <string name="broken_waydroid_integration_title">Waydroid 整合功能失效</string>
+    <string name="broken_waydroid_integration_msg">（点击此通知以了解更多）"waydroid app install" 等功能将无法正常工作</string>
+    <string name="dmabuf_missing_title">缺少 DMA-BUF 支持</string>
+    <string name="dmabuf_missing_msg">DMA-BUF 系统堆不存在（或内核不支持），视频播放可能无法正常工作</string>
+    <string name="unsupported_nvidia_kmd_title">检测到不支持的 NVIDIA 内核驱动</string>
+    <string name="unsupported_nvidia_kmd_msg">目前仅支持 nouveau 内核驱动，请考虑切换至 nouveau 以启用 GPU 硬件加速</string>
+    <string name="sw_rendering_title">Waydroid 正在无 GPU 加速模式下运行</string>
+    <string name="sw_rendering_msg">系统 GPU 不受支持，或已被手动禁用</string>
 </resources>

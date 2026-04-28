@@ -131,6 +131,19 @@
     <string name="charging_control_notification_content_target">Battery will be fully charged at %1$s</string>
     <string name="charging_control_notification_content_target_reached">Battery is charged</string>
 
-    <string name="waydroid_dmabuf_missing_title">Missing DMA-BUF support</string>
-    <string name="waydroid_dmabuf_missing_msg">DMA-BUF system heap does not exist (disabled in kernel?), video playback might not work properly</string>
+    <string name="broken_waydroid_integration_title">Waydroid integration is not functional</string>
+    <string name="broken_waydroid_integration_msg">(Click this notification for more information) Things like "waydroid app install" will not work</string>
+    <string name="broken_waydroid_integration_url">https://github.com/WayDroid-ATV/docs/wiki/%5BFAQ%5D-Waydroid-integration-support</string>
+
+    <string name="dmabuf_missing_title">Missing DMA-BUF support</string>
+    <string name="dmabuf_missing_msg">DMA-BUF system heap does not exist (or not supported by the kernel), video playback might not work properly</string>
+    <string name="dmabuf_missing_url">https://github.com/WayDroid-ATV/docs/wiki/%5BFAQ%5D-Video-playback#21-dma-buf-heap-support-in-kernel</string>
+
+    <string name="unsupported_nvidia_kmd_title">Unsupported NVIDIA kernel driver detected</string>
+    <string name="unsupported_nvidia_kmd_msg">Only the nouveau kernel driver is supported currently, consider switching to nouveau for proper GPU acceleration support</string>
+    <string name="unsupported_nvidia_kmd_url">https://github.com/WayDroid-ATV/docs/wiki/%5BFAQ%5D-GPU-acceleration</string>
+
+    <string name="sw_rendering_title">Waydroid is running without GPU acceleration</string>
+    <string name="sw_rendering_msg">GPU acceleration support is either missing or explicitly disabled</string>
+    <string name="sw_rendering_url">https://github.com/WayDroid-ATV/docs/wiki/%5BFAQ%5D-GPU-acceleration</string>
 </resources>

@@ -81,6 +81,12 @@
     <string name="charging_control_notification_content_limit_reached">電池已充電至 %1$d%%</string>
     <string name="charging_control_notification_content_target">電池已在 %1$s 完全充飽</string>
     <string name="charging_control_notification_content_target_reached">電池已完成充電</string>
-    <string name="waydroid_dmabuf_missing_title">系統不支援 DMA-BUF</string>
-    <string name="waydroid_dmabuf_missing_msg">DMA-BUF 系統堆疊不存在（可能在核心中被停用？），影片可能無法正常播放</string>
+    <string name="broken_waydroid_integration_title">Waydroid 整合功能失效</string>
+    <string name="broken_waydroid_integration_msg">"（點擊此通知以了解更多）"waydroid app install" 等功能將無法正常運作</string>
+    <string name="dmabuf_missing_title">缺少 DMA-BUF 支援</string>
+    <string name="dmabuf_missing_msg">DMA-BUF 系統堆疊不存在（或核心不支援），影片可能無法正常播放</string>
+    <string name="unsupported_nvidia_kmd_title">偵測到不支援的 NVIDIA 核心驅動</string>
+    <string name="unsupported_nvidia_kmd_msg">目前僅支援 nouveau 核心驅動，請考慮切換至 nouveau 以啟用 GPU 硬體加速</string>
+    <string name="sw_rendering_title">Waydroid 目前在沒有 GPU 加速的情況下執行</string>
+    <string name="sw_rendering_msg">系統 GPU 不被支援，或已被手動停用</string>
 </resources>
